@@ -12,6 +12,7 @@ import { findMemberByServer } from '@/services/member-services';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import Loading from '../../components/Loading';
 
 type createConversationProps = {
 	memberOneId?: string;
@@ -101,7 +102,7 @@ const ConversationPage = () => {
 	};
 
 	if (isPending || loadingMember || !isLoaded || loadingConnect)
-		return <h1>Loading...</h1>;
+		return <Loading/>
 
 	if (conversation && !loadingConnect) {
 		const { memberOne, memberTwo } = conversation!;

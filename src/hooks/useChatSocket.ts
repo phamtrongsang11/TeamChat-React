@@ -30,7 +30,7 @@ export const useChatSocket = ({
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
-		if (!connection) return;
+		if (!connection || !connection.on) return;
 
 		connection.on(updateKey, (member: Member, message: Message) => {
 			console.log(member, message);

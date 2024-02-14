@@ -1,5 +1,18 @@
-import { LiveKitRoom, VideoConference } from '@livekit/components-react';
+import useClerkUser from '@/hooks/useClerkUser';
 import '@livekit/components-styles';
+import {
+	ControlBar,
+	GridLayout,
+	LiveKitRoom,
+	ParticipantTile,
+	RoomAudioRenderer,
+	VideoConference,
+	useTracks,
+} from '@livekit/components-react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import Loading from './Loading';
+import { Track } from 'livekit-client';
 
 interface MediaRoomProps {
 	chatId: string;
@@ -8,21 +21,71 @@ interface MediaRoomProps {
 }
 
 const serverUrl = 'wss://discord-tutorial-bp7ndoq5.livekit.cloud';
-const token =
-	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDYwNjc3MTYsImlzcyI6IkFQSTJIRTJCZnJ4U0ZNYSIsIm5iZiI6MTcwNTk4MTMxNiwic3ViIjoicXVpY2tzdGFydCB1c2VyIDU5bjltZSIsInZpZGVvIjp7ImNhblB1Ymxpc2giOnRydWUsImNhblB1Ymxpc2hEYXRhIjp0cnVlLCJjYW5TdWJzY3JpYmUiOnRydWUsInJvb20iOiJxdWlja3N0YXJ0IHJvb20iLCJyb29tSm9pbiI6dHJ1ZX19.08SFSZfw2UQqVAgJu_Dfs71EYrUcsw5eJasmA-0bbEQ';
 
 export const MediaRoom = ({ chatId, video, audio }: MediaRoomProps) => {
+	const { user, isLoaded } = useClerkUser();
+	const [token, setToken] = useState<string>('');
+	const [isLoading, setIsLoading] = useState(false);
+	useEffect(() => {
+		const getToken = async () => {
+			try {
+				setIsLoading(true);
+				const { data } = await axios.post('http://localhost:5173/token', {
+					user: user?.id,
+					room: chatId,
+				});
+				setToken(data);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+		if (isLoaded) getToken();
+	}, [isLoaded]);
+
+	if (isLoading || !isLoaded) return <Loading />;
+
 	return (
+		// <LiveKitRoom
+		// 	data-lk-theme="default"
+		// 	serverUrl={serverUrl}
+		// 	token={token}
+		// 	connect={true}
+		// 	video={video}
+		// 	audio={audio}
+		// >
+		// 	<VideoConference />
+		// </LiveKitRoom>
 		<LiveKitRoom
-			data-lk-theme="default"
-			serverUrl={serverUrl}
-			token={token}
-			connect={true}
 			video={video}
 			audio={audio}
+			token={token}
+			serverUrl={serverUrl}
+			data-lk-theme="default"
+			style={{ height: '100vh' }}
 		>
-			<VideoConference />
+			<MyVideoConference />
+			<RoomAudioRenderer />
+			<ControlBar />
 		</LiveKitRoom>
 	);
 };
 
+function MyVideoConference() {
+	const tracks = useTracks(
+		[
+			{ source: Track.Source.Camera, withPlaceholder: true },
+			{ source: Track.Source.ScreenShare, withPlaceholder: false },
+		],
+		{ onlySubscribed: false }
+	);
+	return (
+		<GridLayout
+			tracks={tracks}
+			style={{ height: 'calc(100vh - var(--lk-control-bar-height))' }}
+		>
+			<ParticipantTile />
+		</GridLayout>
+	);
+}

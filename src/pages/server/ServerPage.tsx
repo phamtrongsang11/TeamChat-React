@@ -3,6 +3,7 @@ import useReactQuery from '@/hooks/useReactQuery';
 import { getServer } from '@/services/server-services';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Loading from '../../components/Loading';
 
 const ServerIdPage = () => {
 	const { serverId } = useParams<{ serverId: string }>();
@@ -27,7 +28,7 @@ const ServerIdPage = () => {
 		}
 	}, [server]);
 
-	if (isLoading || !isLoaded) return <h1>Loading...</h1>;
+	if (isLoading || !isLoaded) return <Loading />;
 };
 
 export default ServerIdPage;

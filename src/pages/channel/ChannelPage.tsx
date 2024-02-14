@@ -11,6 +11,7 @@ import { findMemberByServer } from '@/services/member-services';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Loading from '../../components/Loading';
 
 const ChannelIdPage = () => {
 	const setConnection = useServerStore((s) => s.setConnectionChannel);
@@ -61,8 +62,7 @@ const ChannelIdPage = () => {
 		connectSocket();
 	}, [channelId]);
 
-	if (loadingChannel || loadingMember || !isLoaded)
-		return <div>Loading...</div>;
+	if (loadingChannel || loadingMember || !isLoaded) return <Loading />;
 	else
 		return (
 			<div className="bg-white dark:bg-[#31333B] flex flex-col h-[100vh]">

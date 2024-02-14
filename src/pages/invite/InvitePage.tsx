@@ -62,7 +62,7 @@ const InvitePage = () => {
 		return;
 	}
 
-	if (isLoading || !isLoaded || isPending) return <h1>Loading...</h1>;
+	if (isLoading || !isLoaded || isPending) return <Loading />;
 };
 
 export default InvitePage;

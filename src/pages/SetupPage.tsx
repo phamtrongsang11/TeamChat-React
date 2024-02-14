@@ -4,6 +4,7 @@ import useReactQuery from '@/hooks/useReactQuery';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getServersByGetOrCreateUser } from '../services/profile-services';
+import Loading from '../components/Loading';
 const SetupPage = () => {
 	const { user, isLoaded } = useClerkUser();
 
@@ -83,7 +84,7 @@ const SetupPage = () => {
 
 	if (error) return <h1>{error?.message}</h1>;
 
-	if (!isLoaded || isLoading) return <h1>Loading...</h1>;
+	if (!isLoaded || isLoading) return <Loading />;
 
 	return <InitialModal />;
 };

@@ -10,6 +10,7 @@ import ServerHeader from './ServerHeader';
 import ServerMember from './ServerMember';
 import ServerSearch from './ServerSearch';
 import ServerSection from './ServerSection';
+import Loading from '../Loading';
 
 interface ServerSidebarProps {
 	serverId: string;
@@ -38,7 +39,7 @@ const ServerSidebar = ({ serverId }: ServerSidebarProps) => {
 		error,
 	} = useReactQuery('server', () => getServer(serverId!), [serverId]);
 
-	if (isLoading || !isLoaded) return <h1>Loading...</h1>;
+	if (isLoading || !isLoaded) return <Loading/>
 
 	if (server) {
 		const textChannels = server?.channels.filter(
