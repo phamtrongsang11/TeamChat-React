@@ -1,8 +1,8 @@
+import { Client } from 'stompjs';
 import { Badge } from './ui/badge';
-import { HubConnection } from '@microsoft/signalr';
 
 interface SocketIndicatorProps {
-	connection: HubConnection;
+	connection: Client;
 }
 
 const SocketIndicator = ({ connection }: SocketIndicatorProps) => {

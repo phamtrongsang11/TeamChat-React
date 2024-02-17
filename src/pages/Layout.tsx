@@ -1,9 +1,7 @@
-import React from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import NavigationSidebar from '@/components/navigation/NavigationSidebar';
-import useUserStore from '@/hooks/useUserStore';
 import ServerSidebar from '@/components/servers/ServerSidebar';
 import useClerkUser from '@/hooks/useClerkUser';
+import { Outlet, useParams } from 'react-router-dom';
 
 const Layout = () => {
 	const { serverId } = useParams<{ serverId: string }>();

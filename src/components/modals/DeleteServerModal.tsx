@@ -12,14 +12,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '../ui/dialog';
-import { useNavigate } from 'react-router-dom';
 
 export const DeleteServerModal = () => {
 	const { type, isOpen, onClose, data } = useModal();
 	const isModalOpen = isOpen && type === 'deleteServer';
 	const { server } = data;
-	const { user, isLoaded } = useClerkUser();
-	const navigate = useNavigate();
+	const { user } = useClerkUser();
 
 	const { mutate, isPending } = useReactMutation<{ id: string }>(
 		deleteServer,

@@ -3,6 +3,7 @@ import useReactQuery from '@/hooks/useReactQuery';
 import { ChannelType, MemberRole } from '@/lib/types';
 import { getServer } from '@/services/server-services';
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from 'lucide-react';
+import Loading from '../Loading';
 import { ScrollArea } from '../ui/scroll-area';
 import { Separator } from '../ui/separator';
 import ServerChannel from './ServerChannel';
@@ -10,7 +11,6 @@ import ServerHeader from './ServerHeader';
 import ServerMember from './ServerMember';
 import ServerSearch from './ServerSearch';
 import ServerSection from './ServerSection';
-import Loading from '../Loading';
 
 interface ServerSidebarProps {
 	serverId: string;
@@ -33,13 +33,13 @@ const roleIconMap = {
 const ServerSidebar = ({ serverId }: ServerSidebarProps) => {
 	const { user, isLoaded } = useClerkUser();
 
-	const {
-		data: server,
-		isLoading,
-		error,
-	} = useReactQuery('server', () => getServer(serverId!), [serverId]);
+	const { data: server, isLoading } = useReactQuery(
+		'server',
+		() => getServer(serverId!),
+		[serverId]
+	);
 
-	if (isLoading || !isLoaded) return <Loading/>
+	if (isLoading || !isLoaded) return <Loading />;
 
 	if (server) {
 		const textChannels = server?.channels.filter(
@@ -70,7 +70,7 @@ const ServerSidebar = ({ serverId }: ServerSidebarProps) => {
 								{
 									label: 'Text Channels',
 									type: 'channel',
-									data: textChannels.reverse()?.map((channel) => ({
+									data: textChannels?.map((channel) => ({
 										id: channel.id,
 										name: channel.name,
 										icon: iconMap[channel.type],
@@ -178,11 +178,7 @@ const ServerSidebar = ({ serverId }: ServerSidebarProps) => {
 							/>
 							<div className="space-y-[2px]">
 								{members.map((member) => (
-									<ServerMember
-										key={member.id}
-										member={member}
-										server={server}
-									/>
+									<ServerMember key={member.id} member={member} />
 								))}
 							</div>
 						</div>

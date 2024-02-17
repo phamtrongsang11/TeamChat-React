@@ -11,11 +11,11 @@ const ServerIdPage = () => {
 
 	const { isLoaded } = useClerkUser();
 
-	const {
-		data: server,
-		isLoading,
-		error,
-	} = useReactQuery('server', () => getServer(serverId!), [serverId]);
+	const { data: server, isLoading } = useReactQuery(
+		'server',
+		() => getServer(serverId!),
+		[serverId]
+	);
 
 	useEffect(() => {
 		if (server) {

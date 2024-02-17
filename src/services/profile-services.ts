@@ -33,16 +33,6 @@ export const getOrCreateProfile = (data: Profile) => {
 export const getServersByGetOrCreateUser = (
 	data: Profile
 ): Promise<Server[]> => {
-	// let userId = data.id;
-	// get<Profile>(endpoint, data.id)
-	// 	.then((foundProfile) => (userId = foundProfile.id))
-	// 	.catch((error) => {
-	// 		if (error.response && error.response.status === 404) {
-	// 			post<Profile>(endpoint, data).then(
-	// 				(savedProfile) => (userId = savedProfile.id)
-	// 			);
-	// 		}
-	// 	});
 	const userId = getOrCreateProfile(data);
 
 	return getAll<Server>('/servers/member', {

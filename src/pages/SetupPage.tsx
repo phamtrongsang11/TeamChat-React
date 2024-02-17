@@ -27,54 +27,6 @@ const SetupPage = () => {
 		!!user
 	);
 
-	// useEffect(() => {
-	// 	const getServer = async () => {
-	// 		let userId = user?.id;
-	// 		try {
-	// 			setIsLoading(true);
-	// 			const { data: profile } = await axios.get<Profile>(
-	// 				`http://localhost:5173/api/profiles/${user?.id}`
-	// 			);
-	// 			userId = profile.id;
-	// 		} catch (error: any) {
-	// 			console.log(error);
-	// 			if (error.response && error.response.status === 404) {
-	// 				try {
-	// 					const { data: savedProfile } = await axios.post<Profile>(
-	// 						`http://localhost:5173/api/profiles`,
-	// 						{
-	// 							id: user?.id,
-	// 							name: `${user?.firstName} ${user?.lastName}`,
-	// 							imageUrl: user?.imageUrl,
-	// 							email: user?.emailAddresses[0].emailAddress,
-	// 						}
-	// 					);
-	// 					userId = savedProfile.id;
-	// 				} catch (error: any) {
-	// 					console.log(error);
-	// 				}
-	// 			}
-	// 		} finally {
-	// 			setUser(userId!);
-	// 			try {
-	// 				const { data: server } = await axios.get<Server[]>(
-	// 					'http://localhost:5173/api/servers/member',
-	// 					{
-	// 						params: {
-	// 							memberId: userId,
-	// 						},
-	// 					}
-	// 				);
-	// 				setServer(server[0]);
-	// 			} catch (error: any) {
-	// 				console.log(error);
-	// 			}
-	// 			setIsLoading(false);
-	// 		}
-	// 	};
-	// 	if (user) getServer();
-	// }, [user]);
-
 	useEffect(() => {
 		if (servers && servers?.length > 0) {
 			navigate(`/servers/${servers[0].id}`);

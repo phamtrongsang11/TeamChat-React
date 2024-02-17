@@ -2,11 +2,11 @@ import { useModal } from '@/hooks/useModalStore';
 import { Member, MemberRole, Profile } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { HubConnection } from '@microsoft/signalr';
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Client } from 'stompjs';
 import * as z from 'zod';
 import ActionTooltip from '../TooltipAction';
 import UserAvatar from '../UserAvatar';
@@ -17,6 +17,7 @@ import { Input } from '../ui/input';
 interface ChatItemProps {
 	id: string;
 	content: string;
+	type: string;
 	member: Member & {
 		profile: Profile;
 	};
@@ -27,7 +28,7 @@ interface ChatItemProps {
 	isUpdated: boolean;
 	socketUrl: string;
 	socketQuery: Record<string, string>;
-	connection: HubConnection;
+	connection: Client;
 }
 
 const roleIconMap = {
@@ -43,6 +44,7 @@ const formSchema = z.object({
 const ChatItem = ({
 	id,
 	content,
+	type,
 	member,
 	timestamp,
 	fileUrl,
@@ -86,7 +88,12 @@ const ChatItem = ({
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
 			const message = { id, ...socketQuery, ...values };
-			await connection.invoke('UpdateMessage', message);
+			const url =
+				type == 'channel'
+					? 'message.updateMessage'
+					: 'directMessage.updateMessage';
+
+			connection.send('/chat/' + url, {}, JSON.stringify(message));
 			form.reset();
 			setIsEditing(false);
 		} catch (error) {
@@ -228,6 +235,7 @@ const ChatItem = ({
 									apiUrl: `${socketUrl}/${id}`,
 									query: { id, ...socketQuery },
 									connection: connection,
+									typeMessage: type,
 								})
 							}
 							className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"

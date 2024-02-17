@@ -1,13 +1,12 @@
-import React from 'react';
-import { Plus, Settings } from 'lucide-react';
 import { useModal } from '@/hooks/useModalStore';
-import ActionTooltip from '../TooltipAction';
 import {
 	ChannelType,
 	MemberRole,
 	Server,
 	ServerWithMembersWithProfiles,
 } from '@/lib/types';
+import { Plus, Settings } from 'lucide-react';
+import ActionTooltip from '../TooltipAction';
 
 interface ServerSectionProps {
 	label: string;

@@ -47,13 +47,13 @@ type ChangeRole = {
 };
 
 export const MembersModal = () => {
-	const { type, onOpen, isOpen, onClose, data } = useModal();
+	const { type, isOpen, onClose, data } = useModal();
 	const [loadingId, setLoadingId] = useState('');
 
 	const isModalOpen = isOpen && type === 'members';
 	const { server } = data as { server: ServerWithMembersWithProfiles };
 
-	const { mutate, isPending } = useReactMutation<{ id: string }>(
+	const { mutate } = useReactMutation<{ id: string }>(
 		deleteMember,
 		'server',
 		[server?.id],
@@ -64,12 +64,16 @@ export const MembersModal = () => {
 		}
 	);
 
-	const { mutate: mutateRole, isPending: pendingRole } =
-		useReactMutation<ChangeRole>(editMember, 'server', [server?.id], () => {
+	const { mutate: mutateRole } = useReactMutation<ChangeRole>(
+		editMember,
+		'server',
+		[server?.id],
+		() => {
 			setLoadingId('');
 			onClose();
 			toast.success('Role changed successfully');
-		});
+		}
+	);
 
 	const onKick = (memberId: string) => {
 		setLoadingId(memberId);

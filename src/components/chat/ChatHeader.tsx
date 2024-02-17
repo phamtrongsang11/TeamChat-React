@@ -1,9 +1,9 @@
-import { Hash, Menu } from 'lucide-react';
-import UserAvatar from '../UserAvatar';
-import MobileToogle from '../MobileToggle';
-import ChatVideoButton from './ChatVideoButton';
 import useServerStore from '@/hooks/useServerStore';
+import { Hash } from 'lucide-react';
+import MobileToogle from '../MobileToggle';
 import SocketIndicator from '../SocketIndicator';
+import UserAvatar from '../UserAvatar';
+import ChatVideoButton from './ChatVideoButton';
 
 interface ChatHeaderProps {
 	serverId: string;
@@ -28,7 +28,7 @@ const ChatHeader = ({ serverId, name, type, imageUrl }: ChatHeaderProps) => {
 			<p className="font-semibold text-md text-black dark:text-white">{name}</p>
 			<div className="ml-auto flex items-center">
 				{type === 'conversation' && <ChatVideoButton />}
-				<SocketIndicator connection={connection} />
+				<SocketIndicator connection={connection!} />
 			</div>
 		</div>
 	);

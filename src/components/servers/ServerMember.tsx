@@ -1,4 +1,4 @@
-import { Member, MemberRole, Server } from '@/lib/types';
+import { Member, MemberRole } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ShieldAlert, ShieldCheck } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,7 +6,6 @@ import UserAvatar from '../UserAvatar';
 
 interface ServerMemberProps {
 	member: Member;
-	server: Server;
 }
 
 const roleIconMap = {
@@ -17,7 +16,7 @@ const roleIconMap = {
 	[MemberRole.ADMIN]: <ShieldAlert className="h-4 w-4 ml-2 text-rose-500" />,
 };
 
-const ServerMember = ({ member, server }: ServerMemberProps) => {
+const ServerMember = ({ member }: ServerMemberProps) => {
 	const params = useParams();
 	const navigate = useNavigate();
 	const icon = roleIconMap[member.role];

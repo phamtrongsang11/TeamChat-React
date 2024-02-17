@@ -1,6 +1,5 @@
-import { Conversation, Member } from '@/lib/types';
-import { deleteOne, get, getAll, patch, post } from './api-client';
-import { AxiosRequestConfig } from 'axios';
+import { Conversation } from '@/lib/types';
+import { post } from './api-client';
 
 const endpoint = '/conversations';
 

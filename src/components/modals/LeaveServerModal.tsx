@@ -3,7 +3,6 @@ import { useModal } from '@/hooks/useModalStore';
 import useReactMutation from '@/hooks/useReactMutation';
 import { deleteMemberByProfile } from '@/services/member-services';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import {
 	Dialog,
@@ -18,7 +17,6 @@ export const LeaveServerModal = () => {
 	const { type, isOpen, onClose, data } = useModal();
 	const isModalOpen = isOpen && type === 'leaveServer';
 	const { server } = data;
-	const navigate = useNavigate();
 
 	const { user } = useClerkUser();
 

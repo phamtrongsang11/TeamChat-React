@@ -1,5 +1,5 @@
 import { Channel, ChannelType, Server } from '@/lib/types';
-import { HubConnection } from '@microsoft/signalr';
+import { Client } from 'stompjs';
 import { create } from 'zustand';
 
 export type ModalType =
@@ -21,7 +21,8 @@ interface ModalData {
 	channelType?: ChannelType;
 	apiUrl?: string;
 	query?: Record<string, any>;
-	connection?: HubConnection;
+	connection?: Client;
+	typeMessage?: string;
 }
 
 interface ModalStore {

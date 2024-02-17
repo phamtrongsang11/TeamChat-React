@@ -8,10 +8,12 @@ import useServerStore from '@/hooks/useServerStore';
 import { ChannelType } from '@/lib/types';
 import { getChannel } from '@/services/channel-services';
 import { findMemberByServer } from '@/services/member-services';
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../../components/Loading';
+
+import SockJS from 'sockjs-client';
+import { over } from 'stompjs';
 
 const ChannelIdPage = () => {
 	const setConnection = useServerStore((s) => s.setConnectionChannel);
@@ -47,22 +49,26 @@ const ChannelIdPage = () => {
 	}, [channel, member]);
 
 	useEffect(() => {
-		const connectSocket = async () => {
-			const connection = new HubConnectionBuilder()
-				.withUrl(`${import.meta.env.VITE_BASE_URL}/chat/message`)
-				.configureLogging(LogLevel.Information)
-				.build();
-
-			await connection.start();
-
-			const userId = user?.id;
-			await connection.invoke('ConnectChannel', { userId, channelId });
-			setConnection(connection);
+		const connectSocket = () => {
+			let Sock = new SockJS(`${import.meta.env.VITE_SOCKET_URL}/ws`);
+			const stompClient = over(Sock);
+			stompClient.connect({}, () => {}, onError);
+			setConnection(stompClient);
 		};
-		connectSocket();
-	}, [channelId]);
+		if (!connectionChannel) connectSocket();
+	}, []);
 
-	if (loadingChannel || loadingMember || !isLoaded) return <Loading />;
+	const onError = (error: any) => {
+		console.log(error);
+	};
+
+	if (
+		loadingChannel ||
+		loadingMember ||
+		!isLoaded ||
+		!connectionChannel?.connected
+	)
+		return <Loading />;
 	else
 		return (
 			<div className="bg-white dark:bg-[#31333B] flex flex-col h-[100vh]">
@@ -85,7 +91,7 @@ const ChannelIdPage = () => {
 							}}
 							paramKey="channelId"
 							paramValue={channel?.id!}
-							connection={connectionChannel}
+							connection={connectionChannel!}
 						/>
 						<ChatInput
 							name={channel?.name!}
@@ -95,7 +101,7 @@ const ChannelIdPage = () => {
 								channelId: channel?.id!,
 								memberId: member?.id!,
 							}}
-							connection={connectionChannel}
+							connection={connectionChannel!}
 						/>
 					</>
 				)}

@@ -1,13 +1,13 @@
-import React, { ElementRef, Fragment, useRef } from 'react';
-import { Loader2, ServerCrash } from 'lucide-react';
-import { format } from 'date-fns';
-import { Member, Message, Profile } from '@/lib/types';
 import { useChatQuery } from '@/hooks/useChatQuery';
 import { useChatScroll } from '@/hooks/useChatScroll';
-import ChatWelcome from './ChatWelcome';
-import ChatItem from './ChatItem';
 import { useChatSocket } from '@/hooks/useChatSocket';
-import { HubConnection } from '@microsoft/signalr';
+import { Member, Message, Profile } from '@/lib/types';
+import { format } from 'date-fns';
+import { Loader2, ServerCrash } from 'lucide-react';
+import { ElementRef, Fragment, useRef } from 'react';
+import { Client } from 'stompjs';
+import ChatItem from './ChatItem';
+import ChatWelcome from './ChatWelcome';
 
 const DATE_FORMAT = 'd MMM yyyy, HH:mm';
 
@@ -27,7 +27,7 @@ interface ChatMessagesProps {
 	paramKey: 'channelId' | 'conversationId';
 	paramValue: string;
 	type: 'channel' | 'conversation';
-	connection: HubConnection;
+	connection: Client;
 }
 
 const ChatMessages = ({
@@ -43,8 +43,8 @@ const ChatMessages = ({
 	connection,
 }: ChatMessagesProps) => {
 	const queryKey = `chat:${chatId}`;
-	const addKey = `ReceiveMessage`;
-	const updateKey = `ReceiveUpdateMessage`;
+	const addKey = `/ReceiveMessage/${chatId}`;
+	const updateKey = `/ReceiveUpdateMessage/${chatId}`;
 
 	const chatRef = useRef<ElementRef<'div'>>(null);
 	const bottomRef = useRef<ElementRef<'div'>>(null);
@@ -113,6 +113,7 @@ const ChatMessages = ({
 									<ChatItem
 										key={message.id}
 										id={message.id}
+										type={type}
 										currentMember={member}
 										member={message.member}
 										content={message.content}

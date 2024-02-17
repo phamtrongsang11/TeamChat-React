@@ -1,6 +1,6 @@
-import { Channel, Server } from '@/lib/types';
-import { deleteOne, get, getAll, patch, post } from './api-client';
+import { Channel } from '@/lib/types';
 import { AxiosRequestConfig } from 'axios';
+import { deleteOne, get, getAll, patch, post } from './api-client';
 
 const endpoint = '/channels';
 

@@ -12,11 +12,7 @@ import Loading from '../Loading';
 const NavigationSidebar = () => {
 	const { user, isLoaded } = useClerkUser();
 
-	const {
-		data: servers,
-		isLoading,
-		error,
-	} = useReactQuery(
+	const { data: servers, isLoading } = useReactQuery(
 		'serversByUser',
 		() => getServersByUser(user?.id!),
 		[user?.id],

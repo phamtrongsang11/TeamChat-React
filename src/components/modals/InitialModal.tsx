@@ -49,7 +49,7 @@ export const InitialModal = () => {
 	const [isMounted, setIsMounted] = useState(false);
 	const navigate = useNavigate();
 
-	const { user, isLoaded } = useClerkUser();
+	const { user } = useClerkUser();
 
 	useEffect(() => {
 		setIsMounted(true);
@@ -65,7 +65,7 @@ export const InitialModal = () => {
 
 	const isLoading = form.formState.isSubmitting;
 
-	const { mutate, isPending } = useReactMutation<CreateServerProps>(
+	const { mutate } = useReactMutation<CreateServerProps>(
 		createServer,
 		'serversByUser',
 		[user?.id],

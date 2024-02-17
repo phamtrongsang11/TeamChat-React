@@ -13,7 +13,7 @@ import {
 export const DeleteMessageModal = () => {
 	const { type, isOpen, onClose, data } = useModal();
 	const [isLoading, setIsLoading] = useState(false);
-	const { apiUrl, query } = data;
+	const { query, typeMessage } = data;
 	const isModalOpen = isOpen && type === 'deleteMessage';
 	const { connection } = data;
 
@@ -23,7 +23,12 @@ export const DeleteMessageModal = () => {
 
 			if (connection) {
 				const message = { ...query };
-				await connection.invoke('DeleteMessage', message);
+
+				const url =
+					type && typeMessage == 'channel'
+						? 'message.deleteMessage'
+						: 'directMessage.deleteMessage';
+				connection.send('/chat/' + url, {}, JSON.stringify(message));
 			}
 
 			onClose();

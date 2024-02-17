@@ -1,4 +1,4 @@
-import { HubConnection } from '@microsoft/signalr';
+import { Client } from 'stompjs';
 import { create } from 'zustand';
 
 interface Server {
@@ -6,20 +6,20 @@ interface Server {
 }
 interface ServerStore {
 	server: Server;
-	connectionChannel: HubConnection;
-	connectionConversation: HubConnection;
+	connectionChannel: Client | null;
+	connectionConversation: Client | null;
 	refreshChannel: boolean;
 	refreshServer: boolean;
 	setServer: (id: string) => void;
 	setRefreshChannel: (refresh: boolean) => void;
 	setRefreshServer: (refresh: boolean) => void;
-	setConnectionChannel: (connection: HubConnection) => void;
-	setConnectionConversation: (connection: HubConnection) => void;
+	setConnectionChannel: (connection: Client) => void;
+	setConnectionConversation: (connection: Client) => void;
 }
 const useServerStore = create<ServerStore>((set) => ({
 	server: {},
-	connectionChannel: {} as HubConnection,
-	connectionConversation: {} as HubConnection,
+	connectionChannel: null,
+	connectionConversation: null,
 	refreshChannel: false,
 	refreshServer: false,
 	setServer(id) {
@@ -31,10 +31,10 @@ const useServerStore = create<ServerStore>((set) => ({
 	setRefreshServer(refresh) {
 		set({ refreshServer: refresh });
 	},
-	setConnectionChannel(connection: HubConnection) {
+	setConnectionChannel(connection: Client) {
 		set({ connectionChannel: connection });
 	},
-	setConnectionConversation(connection: HubConnection) {
+	setConnectionConversation(connection: Client) {
 		set({ connectionConversation: connection });
 	},
 }));

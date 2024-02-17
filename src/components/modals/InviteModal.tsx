@@ -25,7 +25,7 @@ export const InviteModal = () => {
 	const [copied, setCopied] = useState(false);
 	const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
 
-	const { user, isLoaded } = useClerkUser();
+	const { user } = useClerkUser();
 
 	const onCopy = () => {
 		navigator.clipboard.writeText(inviteUrl);

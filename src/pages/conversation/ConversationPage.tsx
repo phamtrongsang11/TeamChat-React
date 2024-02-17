@@ -9,9 +9,10 @@ import useServerStore from '@/hooks/useServerStore';
 import { Conversation } from '@/lib/types';
 import { createConversation } from '@/services/conversation-services';
 import { findMemberByServer } from '@/services/member-services';
-import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import { over } from 'stompjs';
 import Loading from '../../components/Loading';
 
 type createConversationProps = {
@@ -30,8 +31,6 @@ const ConversationPage = () => {
 
 	const { user, isLoaded } = useClerkUser();
 
-	const [loadingConnect, setLoadingConnect] = useState(false);
-
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
 	const isVideo = searchParams.get('video');
@@ -43,11 +42,7 @@ const ConversationPage = () => {
 		(s) => s.setConnectionConversation
 	);
 
-	const {
-		data: currentMember,
-		isLoading: loadingMember,
-		error,
-	} = useReactQuery(
+	const { data: currentMember, isLoading: loadingMember } = useReactQuery(
 		'member',
 		() => findMemberByServer(serverId!, user?.id!),
 		[serverId, user?.id],
@@ -63,9 +58,7 @@ const ConversationPage = () => {
 				navigate(`/servers/${serverId}`);
 				return;
 			}
-			setLoadingConnect(true);
 			setConversation(savedConversation);
-			connectSocket(savedConversation.id);
 		}
 	);
 
@@ -76,35 +69,35 @@ const ConversationPage = () => {
 				memberTwoId: memberId,
 			});
 		}
-		if (!loadingMember && currentMember) {
-			navigate('/');
-			return;
-		}
+		// if (!loadingMember && currentMember) {
+		// 	navigate('/');
+		// 	return;
+		// }
 	}, [currentMember]);
 
-	const connectSocket = async (savedConversationId: string) => {
-		const connection = new HubConnectionBuilder()
-			.withUrl(`${import.meta.env.VITE_BASE_URL}/chat/directMessage`)
-			.configureLogging(LogLevel.Information)
-			.build();
+	useEffect(() => {
+		const connectSocket = () => {
+			let Sock = new SockJS(`${import.meta.env.VITE_SOCKET_URL}/ws/direct`);
+			const stompClient = over(Sock);
+			stompClient.connect({}, () => {}, onError);
+			setConnectionConversation(stompClient);
+		};
+		if (!connectionConversation) connectSocket();
+	}, []);
 
-		setConnectionConversation(connection);
-
-		await connection.start();
-
-		const userId = user?.id;
-		const conversationId = savedConversationId;
-		await connection.invoke('ConnectConversation', {
-			userId,
-			conversationId,
-		});
-		setLoadingConnect(false);
+	const onError = (error: any) => {
+		console.log(error);
 	};
 
-	if (isPending || loadingMember || !isLoaded || loadingConnect)
-		return <Loading/>
+	if (
+		isPending ||
+		loadingMember ||
+		!isLoaded ||
+		!connectionConversation?.connected
+	)
+		return <Loading />;
 
-	if (conversation && !loadingConnect) {
+	if (conversation) {
 		const { memberOne, memberTwo } = conversation!;
 
 		const otherMember =
@@ -136,7 +129,7 @@ const ConversationPage = () => {
 								memberId: currentMember?.id!,
 								conversationId: conversation?.id!,
 							}}
-							connection={connectionConversation}
+							connection={connectionConversation!}
 						/>
 						<ChatInput
 							name={otherMember.profile?.name!}
@@ -146,7 +139,7 @@ const ConversationPage = () => {
 								memberId: currentMember?.id!,
 								conversationId: conversation?.id,
 							}}
-							connection={connectionConversation}
+							connection={connectionConversation!}
 						/>
 					</>
 				)}

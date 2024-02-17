@@ -47,7 +47,7 @@ export const EditServerModal = () => {
 	const queryClient = useQueryClient();
 	const { type, isOpen, onClose, data } = useModal();
 	const isModalOpen = isOpen && type === 'editServer';
-	const { user, isLoaded } = useClerkUser();
+	const { user } = useClerkUser();
 
 	const { server } = data;
 
@@ -68,7 +68,7 @@ export const EditServerModal = () => {
 
 	const isLoading = form.formState.isSubmitting;
 
-	const { mutate, isPending } = useReactMutation<UpdateServerProps>(
+	const { mutate } = useReactMutation<UpdateServerProps>(
 		editServer,
 		'serversByUser',
 		[user?.id],

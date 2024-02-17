@@ -1,3 +1,4 @@
+import Loading from '@/components/Loading';
 import useClerkUser from '@/hooks/useClerkUser';
 import useReactMutation from '@/hooks/useReactMutation';
 import useReactQuery from '@/hooks/useReactQuery';
@@ -49,13 +50,13 @@ const InvitePage = () => {
 			navigate('/');
 			return;
 		}
-		if (server)
+		if (server && isLoaded)
 			mutate({
 				serverId: server?.id,
 				profileId: user?.id,
 				role: MemberRole.GUEST,
 			});
-	}, [server]);
+	}, [server, isLoaded]);
 
 	if (error) {
 		navigate('/');

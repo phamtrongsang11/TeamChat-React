@@ -1,9 +1,8 @@
 import { useModal } from '@/hooks/useModalStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { HubConnection } from '@microsoft/signalr';
 import { Plus } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Client } from 'stompjs';
 import * as z from 'zod';
 import EmojiPicker from '../EmojiPicker';
 import { Form, FormControl, FormField, FormItem } from '../ui/form';
@@ -14,7 +13,7 @@ interface ChatInputProps {
 	query: Record<string, any>;
 	name: string;
 	type: 'conversation' | 'channel';
-	connection: HubConnection;
+	connection: Client;
 }
 
 const formSchema = z.object({
@@ -29,8 +28,6 @@ const ChatInput = ({
 	connection,
 }: ChatInputProps) => {
 	const { onOpen } = useModal();
-	const navigate = useNavigate();
-	// const connection = useServerStore((s) => s.connectionChannel);
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -43,7 +40,9 @@ const ChatInput = ({
 	const onSubmit = async (value: z.infer<typeof formSchema>) => {
 		try {
 			const message = { ...query, ...value };
-			await connection.invoke('SendMessage', message);
+			const url =
+				type == 'channel' ? 'message.addMessage' : 'directMessage.addMessage';
+			connection.send(`/chat/${url}`, {}, JSON.stringify(message));
 			form.reset();
 		} catch (error) {
 			console.log(error);

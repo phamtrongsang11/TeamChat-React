@@ -1,16 +1,14 @@
 import qs from 'query-string';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { HubConnection } from '@microsoft/signalr';
-
-// import { useSocket } from '@/components/providers/socket-provider';
+import { Client } from 'stompjs';
 
 interface ChatQueryProps {
 	queryKey: string;
 	apiUrl: string;
 	paramKey: 'channelId' | 'conversationId';
 	paramValue: string;
-	connection: HubConnection;
+	connection: Client;
 }
 
 export const useChatQuery = ({
@@ -21,7 +19,6 @@ export const useChatQuery = ({
 	connection,
 }: ChatQueryProps) => {
 	const fetchMessages = async ({ pageParam = undefined }) => {
-		console.log(pageParam);
 		const url = qs.stringifyUrl(
 			{
 				url: apiUrl,

@@ -1,17 +1,13 @@
 import { Member, Message, Profile } from '@/lib/types';
-import {
-	HubConnection,
-	HubConnectionBuilder,
-	LogLevel,
-} from '@microsoft/signalr';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { Client } from 'stompjs';
 
 type ChatSocketProps = {
 	addKey: string;
 	updateKey: string;
 	queryKey: string;
-	connection: HubConnection;
+	connection: Client;
 };
 
 type MessageWithMemberWithProfile = Message & {
@@ -26,23 +22,18 @@ export const useChatSocket = ({
 	queryKey,
 	connection,
 }: ChatSocketProps) => {
-	// const connection = useServerStore((s) => s.connection);
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
-		if (!connection || !connection.on) return;
-
-		connection.on(updateKey, (member: Member, message: Message) => {
-			console.log(member, message);
+		if (!connection) return;
+		const update = connection.subscribe(updateKey, (payload) => {
+			var message = JSON.parse(payload.body);
 			queryClient.setQueryData([queryKey], (oldData: any) => {
 				if (!oldData || !oldData.pages || oldData.pages.length === 0) {
-					// return oldData;
 					return {
 						pages: [[message]],
 					};
 				}
-
-				message.member = member;
 
 				const newData = [...oldData.pages];
 
@@ -52,24 +43,22 @@ export const useChatSocket = ({
 						return item;
 					}
 				);
-				console.log(newData);
 				return { ...oldData, pages: newData };
 			});
 		});
 
-		connection.on(addKey, (member: Member, message: Message) => {
+		const add = connection.subscribe(addKey, (payload) => {
+			var message = JSON.parse(payload.body);
 			queryClient.setQueryData([queryKey], (oldData: any) => {
 				if (!oldData || !oldData.pages || oldData.pages.length === 0) {
 					return {
 						pages: [[message]],
 					};
 				}
-				message.member = member;
 
 				const newData = [...oldData.pages];
 
 				newData[0] = [message, ...newData[0]];
-				console.log(newData);
 
 				return {
 					...oldData,
@@ -79,8 +68,8 @@ export const useChatSocket = ({
 		});
 
 		return () => {
-			connection.off(addKey);
-			connection.off(updateKey);
+			update.unsubscribe();
+			add.unsubscribe();
 		};
-	}, [queryClient, addKey, queryKey, connection, updateKey]);
+	}, []);
 };

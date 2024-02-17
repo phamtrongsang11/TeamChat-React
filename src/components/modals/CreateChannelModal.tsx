@@ -77,7 +77,7 @@ export const CreateChannelModal = () => {
 
 	const isLoading = form.formState.isSubmitting;
 
-	const { mutate, isPending } = useReactMutation<CreateChannelProps>(
+	const { mutate } = useReactMutation<CreateChannelProps>(
 		createChannel,
 		'server',
 		[serverId],

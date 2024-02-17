@@ -1,18 +1,17 @@
 import useClerkUser from '@/hooks/useClerkUser';
-import '@livekit/components-styles';
 import {
 	ControlBar,
 	GridLayout,
 	LiveKitRoom,
 	ParticipantTile,
 	RoomAudioRenderer,
-	VideoConference,
 	useTracks,
 } from '@livekit/components-react';
+import '@livekit/components-styles';
 import axios from 'axios';
+import { Track } from 'livekit-client';
 import { useEffect, useState } from 'react';
 import Loading from './Loading';
-import { Track } from 'livekit-client';
 
 interface MediaRoomProps {
 	chatId: string;
@@ -47,16 +46,6 @@ export const MediaRoom = ({ chatId, video, audio }: MediaRoomProps) => {
 	if (isLoading || !isLoaded) return <Loading />;
 
 	return (
-		// <LiveKitRoom
-		// 	data-lk-theme="default"
-		// 	serverUrl={serverUrl}
-		// 	token={token}
-		// 	connect={true}
-		// 	video={video}
-		// 	audio={audio}
-		// >
-		// 	<VideoConference />
-		// </LiveKitRoom>
 		<LiveKitRoom
 			video={video}
 			audio={audio}

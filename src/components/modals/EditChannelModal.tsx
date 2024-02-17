@@ -72,7 +72,7 @@ export const EditChannelModal = () => {
 
 	const isLoading = form.formState.isSubmitting;
 
-	const { mutate, isPending } = useReactMutation<UpdateChannelProps>(
+	const { mutate } = useReactMutation<UpdateChannelProps>(
 		editChannel,
 		'server',
 		[server?.id],
