@@ -52,8 +52,13 @@ const ChannelIdPage = () => {
 		const connectSocket = () => {
 			let Sock = new SockJS(`${import.meta.env.VITE_SOCKET_URL}/ws`);
 			const stompClient = over(Sock);
-			stompClient.connect({}, () => {}, onError);
-			setConnection(stompClient);
+			stompClient.connect(
+				{},
+				() => {
+					setConnection(stompClient);
+				},
+				onError
+			);
 		};
 		if (!connectionChannel) connectSocket();
 	}, []);
@@ -67,52 +72,53 @@ const ChannelIdPage = () => {
 		loadingMember ||
 		!isLoaded ||
 		!connectionChannel?.connected
-	)
+	) {
 		return <Loading />;
-	else
-		return (
-			<div className="bg-white dark:bg-[#31333B] flex flex-col h-[100vh]">
-				<ChatHeader
-					name={channel?.name!}
-					serverId={channel?.server?.id!}
-					type="channel"
-				/>
-				{channel?.type! === ChannelType.TEXT && (
-					<>
-						<ChatMessages
-							member={member!}
-							name={channel?.name!}
-							chatId={channel?.id!}
-							type="channel"
-							apiUrl={`${baseUrl}/messages/channel`}
-							socketUrl={`${baseUrl}/chat/messages`}
-							socketQuery={{
-								channelId: channel?.id!,
-							}}
-							paramKey="channelId"
-							paramValue={channel?.id!}
-							connection={connectionChannel!}
-						/>
-						<ChatInput
-							name={channel?.name!}
-							type="channel"
-							apiUrl={`${baseUrl}/chat/messages`}
-							query={{
-								channelId: channel?.id!,
-								memberId: member?.id!,
-							}}
-							connection={connectionChannel!}
-						/>
-					</>
-				)}
-				{channel?.type === ChannelType.AUDIO && (
-					<MediaRoom chatId={channel.id} video={false} audio={true} />
-				)}
-				{channel?.type === ChannelType.VIDEO && (
-					<MediaRoom chatId={channel.id} video={true} audio={true} />
-				)}
-			</div>
-		);
+	}
+
+	return (
+		<div className="bg-white dark:bg-[#31333B] flex flex-col h-[100vh]">
+			<ChatHeader
+				name={channel?.name!}
+				serverId={channel?.server?.id!}
+				type="channel"
+			/>
+			{channel?.type! === ChannelType.TEXT && (
+				<>
+					<ChatMessages
+						member={member!}
+						name={channel?.name!}
+						chatId={channel?.id!}
+						type="channel"
+						apiUrl={`${baseUrl}/messages/channel`}
+						socketUrl={`${baseUrl}/chat/messages`}
+						socketQuery={{
+							channelId: channel?.id!,
+						}}
+						paramKey="channelId"
+						paramValue={channel?.id!}
+						connection={connectionChannel!}
+					/>
+					<ChatInput
+						name={channel?.name!}
+						type="channel"
+						apiUrl={`${baseUrl}/chat/messages`}
+						query={{
+							channelId: channel?.id!,
+							memberId: member?.id!,
+						}}
+						connection={connectionChannel!}
+					/>
+				</>
+			)}
+			{channel?.type === ChannelType.AUDIO && (
+				<MediaRoom chatId={channel.id} video={false} audio={true} />
+			)}
+			{channel?.type === ChannelType.VIDEO && (
+				<MediaRoom chatId={channel.id} video={true} audio={true} />
+			)}
+		</div>
+	);
 };
 
 export default ChannelIdPage;

@@ -12,7 +12,7 @@ import { findMemberByServer } from '@/services/member-services';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
-import { over } from 'stompjs';
+import { Client, over } from 'stompjs';
 import Loading from '../../components/Loading';
 
 type createConversationProps = {
@@ -79,8 +79,13 @@ const ConversationPage = () => {
 		const connectSocket = () => {
 			let Sock = new SockJS(`${import.meta.env.VITE_SOCKET_URL}/ws/direct`);
 			const stompClient = over(Sock);
-			stompClient.connect({}, () => {}, onError);
-			setConnectionConversation(stompClient);
+			stompClient.connect(
+				{},
+				() => {
+					setConnectionConversation(stompClient);
+				},
+				onError
+			);
 		};
 		if (!connectionConversation) connectSocket();
 	}, []);
