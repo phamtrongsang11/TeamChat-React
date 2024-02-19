@@ -12,7 +12,7 @@ import { findMemberByServer } from '@/services/member-services';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
-import { Client, over } from 'stompjs';
+import { over } from 'stompjs';
 import Loading from '../../components/Loading';
 
 type createConversationProps = {
