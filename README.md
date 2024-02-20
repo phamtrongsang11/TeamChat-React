@@ -1,30 +1,20 @@
-# React + TypeScript + Vite
+# Movie-App
+Team Chat is a Discord-based system that allows you to chat and hold meetings with other individuals who have joined your server and channel. The system is developed using JavaScript, HTML, React, and Tailwind for the frontend, while Java, Spring framework and PostgresSQL are utilized for the backend. It include various feature such as:
+- Server, channel and member management
+- Chat with members in channel 
+- Chat individuals
+- Voice and video conversation using LiveKit
+- Send file, emoji and more...
+<img src="https://github.com/phamtrongsang11/Movie-App/assets/101312630/e8b4f560-27e9-4de8-bd6b-4e8fa7ef457a"  width="80%" height="80%">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Geting start
+To run the app, simply do:
+- clone this project to your local machine
+- yarn install && npm run dev
 
-Currently, two official plugins are available:
+## Demo (You can access demo by bellow link)
+https://teamchatx-react.netlify.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Backend Link
+https://github.com/phamtrongsang11/TeamChat-Spring
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
