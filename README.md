@@ -9,7 +9,7 @@ Team Chat is a Discord-based system that allows you to chat and hold meetings wi
 
 ## Demo (You can access demo by bellow link)
 - https://teamchatx-react.netlify.app/
-- Link server invite: https://teamchatx-react.netlify.app/servers/94e56f5d-d83a-4a3e-89f9-499f1d10165c/channels/7dcb5248-fc72-468f-875f-a912396ae434 for easy join server and demo function
+- Link server invite: https://teamchatx-react.netlify.app/invite/d1209332-c0f6-4f05-a2c5-b34e88cdf8b2 for easy join server and demo function
 
 ## Geting start
 To run the app, simply do:
