@@ -7,12 +7,13 @@ Team Chat is a Discord-based system that allows you to chat and hold meetings wi
 - Send file, emoji and more...
 <img src="https://github.com/phamtrongsang11/TeamChat-React/assets/101312630/ad149efd-b219-4612-ba48-1f0846af48c8" width="80%" height="80%">
 
+## Demo (You can access demo by bellow link)
+https://teamchatx-react.netlify.app/
+Link server invite: https://teamchatx-react.netlify.app/servers/94e56f5d-d83a-4a3e-89f9-499f1d10165c/channels/7dcb5248-fc72-468f-875f-a912396ae434 for easy join server and demo function
 
 ## Geting start
 To run the app, simply do:
-- Clone backend source in https://github.com/phamtrongsang11/TeamChat-Spring and run
+- clone backend source in https://github.com/phamtrongsang11/TeamChat-Spring and run
 - clone this repo to your local machine
-- yarn install && npm run dev
+- npm install && npm run dev
 
-## Demo (You can access demo by bellow link)
-https://teamchatx-react.netlify.app/
