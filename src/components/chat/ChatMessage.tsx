@@ -30,6 +30,10 @@ interface ChatMessagesProps {
 	connection: Client;
 }
 
+function getTimeWithoutDecimal(time: Date) {
+	return time ? time.toString().split('.')[0] : '';
+}
+
 const ChatMessages = ({
 	name,
 	member,
@@ -121,9 +125,8 @@ const ChatMessages = ({
 										deleted={message.deleted}
 										timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
 										isUpdated={
-											message.updatedAt !== undefined &&
-											message.updatedAt !== null &&
-											message.updatedAt !== message.createdAt
+											getTimeWithoutDecimal(message.updatedAt) !==
+											getTimeWithoutDecimal(message.createdAt)
 										}
 										socketUrl={socketUrl}
 										socketQuery={socketQuery}
