@@ -2,6 +2,7 @@ import qs from 'query-string';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Client } from 'stompjs';
+import { getToken } from '@/services/api-client';
 
 interface ChatQueryProps {
 	queryKey: string;
@@ -29,7 +30,11 @@ export const useChatQuery = ({
 			},
 			{ skipNull: true }
 		);
-		const res = await fetch(url);
+		const res = await fetch(url, {
+			headers: {
+				Authorization: `Bearer ${getToken('__session')}`,
+			},
+		});
 		return res.json();
 	};
 

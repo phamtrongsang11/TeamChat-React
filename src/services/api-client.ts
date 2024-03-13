@@ -1,7 +1,16 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
+export const getToken = (name: string) => {
+	const value = `; ${document.cookie}`;
+	const parts = value.split(`; ${name}=`);
+	if (parts.length === 2) return parts.pop()?.split(';').shift();
+};
+
 const axiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_BASE_URL,
+	headers: {
+		Authorization: `Bearer ${getToken('__session')}`,
+	},
 });
 
 export const getAll = <T>(endpoint: string, config?: AxiosRequestConfig) => {
