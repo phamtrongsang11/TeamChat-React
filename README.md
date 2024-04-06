@@ -5,9 +5,8 @@ Team Chat is a Discord-based system that allows you to chat and hold meetings wi
 - Chat individuals
 - Voice and video conversation using LiveKit
 - Send file, emoji and more...
-<img src="https://github.com/phamtrongsang11/TeamChat-React/assets/101312630/ad149efd-b219-4612-ba48-1f0846af48c8" width="100%" height="100%">
 
-<img src="https://github.com/phamtrongsang11/TeamChat-React/assets/101312630/f0459aed-e72d-40c0-8a46-eae14daa7e72" width="100%" height="100%">
+<img src="https://github.com/phamtrongsang11/TeamChat-React/assets/101312630/ad149efd-b219-4612-ba48-1f0846af48c8" width="100%" height="100%">
 
 ## Demo (You can access demo by bellow link)
 - https://teamchat-react.netlify.app/
