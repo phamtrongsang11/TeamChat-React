@@ -1,11 +1,10 @@
 import NavigationSidebar from '@/components/navigation/NavigationSidebar';
 import ServerSidebar from '@/components/servers/ServerSidebar';
-import useClerkUser from '@/hooks/useClerkUser';
 import { Outlet, useParams } from 'react-router-dom';
 
 const Layout = () => {
 	const { serverId } = useParams<{ serverId: string }>();
-	const {} = useClerkUser();
+
 	return (
 		<>
 			<div className="h-full">

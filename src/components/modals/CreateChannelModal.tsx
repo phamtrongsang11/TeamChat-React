@@ -77,7 +77,7 @@ export const CreateChannelModal = () => {
 
 	const isLoading = form.formState.isSubmitting;
 
-	const { mutate } = useReactMutation<CreateChannelProps>(
+	const { mutate, isPending } = useReactMutation<CreateChannelProps>(
 		createChannel,
 		'server',
 		[serverId],
@@ -166,7 +166,7 @@ export const CreateChannelModal = () => {
 							/>
 						</div>
 						<DialogFooter className="bg-gray-100 px-6 py-4">
-							<Button variant="primary" disabled={isLoading}>
+							<Button variant="primary" disabled={isPending}>
 								Create
 							</Button>
 						</DialogFooter>

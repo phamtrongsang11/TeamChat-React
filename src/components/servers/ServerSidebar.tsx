@@ -3,7 +3,6 @@ import useReactQuery from '@/hooks/useReactQuery';
 import { ChannelType, MemberRole } from '@/lib/types';
 import { getServer } from '@/services/server-services';
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from 'lucide-react';
-import Loading from '../Loading';
 import { ScrollArea } from '../ui/scroll-area';
 import { Separator } from '../ui/separator';
 import ServerChannel from './ServerChannel';
@@ -11,6 +10,7 @@ import ServerHeader from './ServerHeader';
 import ServerMember from './ServerMember';
 import ServerSearch from './ServerSearch';
 import ServerSection from './ServerSection';
+import SkeletonHorizontal from '../SkeletonHorizontal';
 
 interface ServerSidebarProps {
 	serverId: string;
@@ -39,7 +39,7 @@ const ServerSidebar = ({ serverId }: ServerSidebarProps) => {
 		[serverId]
 	);
 
-	if (isLoading || !isLoaded) return <Loading />;
+	if (isLoading || !isLoaded) return <SkeletonHorizontal />;
 
 	if (server) {
 		const textChannels = server?.channels.filter(
@@ -59,7 +59,6 @@ const ServerSidebar = ({ serverId }: ServerSidebarProps) => {
 		const role = server.members.find(
 			(member) => member.profile?.id === user?.id
 		)?.role;
-
 		return (
 			<div className="flex flex-col h-full text-primary w-full dark:bg-[#2B2D31] bg-[#F2F3F5]">
 				<ServerHeader server={server} role={role} />

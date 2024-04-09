@@ -5,10 +5,19 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getServersByGetOrCreateUser } from '../services/profile-services';
 import Loading from '../components/Loading';
+import { axiosInstance, getToken } from '@/services/api-client';
 const SetupPage = () => {
 	const { user, isLoaded } = useClerkUser();
 
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (user) {
+			axiosInstance.defaults.headers['Authorization'] = `Bearer ${getToken(
+				'__session'
+			)}`;
+		}
+	}, [user]);
 
 	const {
 		data: servers,

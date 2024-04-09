@@ -7,7 +7,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import { Separator } from '../ui/separator';
 import NavigationAction from './NavigationAction';
 import NavigationItem from './NavigationItem';
-import Loading from '../Loading';
+import SkeletonCircle from '../SkeletonCircle';
 
 const NavigationSidebar = () => {
 	const { user, isLoaded } = useClerkUser();
@@ -19,8 +19,7 @@ const NavigationSidebar = () => {
 		!!user
 	);
 
-	if (isLoading || !isLoaded) return <Loading />;
-
+	if (isLoading || !isLoaded) return <SkeletonCircle />;
 	return (
 		<div className="space-y-4 flex flex-col items-center h-full text-primary w-full dark:bg-[#1E1F22] bg-[#E3E5E8] py-3">
 			<NavigationAction />
